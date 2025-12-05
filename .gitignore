@@ -1,0 +1,13 @@
+# 데이터베이스 설정 파일 (비밀번호 포함)
+db_config.php
+
+# 업로드된 이미지 파일
+../img/
+
+# 임시 파일
+*.tmp
+*.log
+
+# OS 생성 파일
+.DS_Store
+Thumbs.db
