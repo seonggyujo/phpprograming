@@ -6,6 +6,16 @@ PHP, MySQL, HTML, CSS, JavaScript
 ## 프로젝트 설명
 이미지 업로드가 가능한 게시판 시스템
 
+## 화면 캡처
+### 게시글 목록
+![목록](screenshots/list.png)
+
+### 게시글 작성
+![작성](screenshots/write.png)
+
+### 게시글 상세보기
+![상세보기](screenshots/view.png)
+
 ## 구현 기능
 - 게시글 CRUD
 - 이미지 업로드
