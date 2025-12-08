@@ -1,33 +1,24 @@
 <?php
-// 데이터베이스 연결 설정 샘플
+// ============================================
+// 데이터베이스 연결 설정 샘플 파일
+// ============================================
+// 
 // 사용 방법:
-// 1. 이 파일을 db_config.php로 복사
+// 1. 이 파일을 복사하여 db_config.php로 저장
 // 2. 아래 설정값을 자신의 환경에 맞게 수정
+// 3. db_config.php는 .gitignore에 포함되어 Git에 업로드되지 않음
+//
+// ============================================
 
-$db_config = array(
-    'host' => '127.0.0.1',
-    'user' => 'root',
-    'password' => '여기에_비밀번호_입력',  // 자신의 MySQL 비밀번호로 변경
-    'database' => 'sample01_db',
-    'port' => 3307
-);
+$host = "127.0.0.1";        // 데이터베이스 호스트 (보통 localhost 또는 127.0.0.1)
+$user = "root";             // 데이터베이스 사용자명
+$pw = "여기에_비밀번호_입력";  // 데이터베이스 비밀번호
+$dbName = "sample01_db";    // 데이터베이스 이름
+$port = 3306;               // MySQL 포트 (기본값: 3306, XAMPP 등에서 다를 수 있음)
 
-// 데이터베이스 연결 함수
-function getDbConnection() {
-    global $db_config;
+$conn = mysqli_connect($host, $user, $pw, $dbName, $port);
 
-    $conn = mysqli_connect(
-        $db_config['host'],
-        $db_config['user'],
-        $db_config['password'],
-        $db_config['database'],
-        $db_config['port']
-    );
-
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-
-    return $conn;
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 ?>
