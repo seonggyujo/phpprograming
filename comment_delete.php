@@ -1,16 +1,6 @@
 <?php
 // 데이터베이스 연결
-$host = "127.0.0.1";
-$user = "root";
-$pw = "SgTest123!";
-$dbName = "sample01_db";
-$port = 3307;
-
-$conn = mysqli_connect($host, $user, $pw, $dbName, $port);
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+require_once 'db_config.php';
 
 // 댓글 번호와 게시글 번호 받기
 $commentNum = isset($_GET['commentNum']) ? (int)$_GET['commentNum'] : 0;

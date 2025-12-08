@@ -7,12 +7,21 @@
         table {
             border-collapse: collapse;
         }
-        table td {
+        table, th, td {
             border: 1px solid black;
         }
-        td.ttl {
+        th {
+            background-color: #ddd;
             text-align: right;
-            background-color: #ccc;
+            padding: 10px;
+            width: 100px;
+        }
+        td {
+            padding: 10px;
+        }
+        .btn {
+            padding: 5px 10px;
+            cursor: pointer;
         }
     </style>
     <script>
@@ -68,36 +77,36 @@
 <body>
     <h2>게시판 - 글쓰기</h2>
 
-    <table>
     <form name="writeForm" method="post" action="board_write_process.php" enctype="multipart/form-data" onsubmit="return validateForm()">
-        <tr>
-            <td class="ttl">제목:</td>
-            <td><input type="text" name="title"></td>
-        </tr>
-        <tr>
-            <td class="ttl">작성자:</td>
-            <td><input type="text" name="writer"></td>
-        </tr>
-        <tr>
-            <td class="ttl">내용:</td>
-            <td><textarea name="content" rows="15" cols="60"></textarea></td>
-        </tr>
-        <tr>
-            <td class="ttl">첨부이미지:</td>
-            <td>
-                <input type="file" name="upload" accept="image/*" onchange="previewImage(this)">
-                <br>
-                <img id="imagePreview" src="" style="display:none; max-width:400px; margin-top:10px; border:1px solid #ccc;">
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <input type="submit" value="등록">
-                <input type="reset" value="다시작성">
-                <input type="button" value="목록" onclick="location.href='board_list.php'">
-            </td>
-        </tr>
+        <table width="600">
+            <tr>
+                <th>제목</th>
+                <td><input type="text" name="title" style="width:90%;"></td>
+            </tr>
+            <tr>
+                <th>작성자</th>
+                <td><input type="text" name="writer"></td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td><textarea name="content" rows="15" cols="60"></textarea></td>
+            </tr>
+            <tr>
+                <th>첨부이미지</th>
+                <td>
+                    <input type="file" name="upload" accept="image/*" onchange="previewImage(this)">
+                    <br>
+                    <img id="imagePreview" src="" style="display:none; max-width:400px; margin-top:10px; border:1px solid #ccc;">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" value="등록" class="btn">
+                    <input type="reset" value="다시작성" class="btn">
+                    <input type="button" value="목록" onclick="location.href='board_list.php'" class="btn">
+                </td>
+            </tr>
+        </table>
     </form>
-    </table>
 </body>
 </html>

@@ -1,16 +1,6 @@
 <?php
 // 데이터베이스 연결
-$host = "127.0.0.1";
-$user = "root";
-$pw = "SgTest123!";
-$dbName = "sample01_db";
-$port = 3307;
-
-$conn = mysqli_connect($host, $user, $pw, $dbName, $port);
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+require_once 'db_config.php';
 
 // 게시글 번호 받기
 $boardNum = isset($_GET['boardNum']) ? (int)$_GET['boardNum'] : 0;
@@ -36,9 +26,9 @@ $fileName = $row['fileName'];
 $deleteSql = "DELETE FROM board WHERE boardNum = $boardNum";
 
 if (mysqli_query($conn, $deleteSql)) {
-    // 첨부이미지가 있으면 파일도 삭제
+    // 첨부파일이 있으면 파일도 삭제
     if ($fileName != null && $fileName != '') {
-        $filePath = "../img/" . $fileName;
+        $filePath = "img/" . $fileName;
         if (file_exists($filePath)) {
             unlink($filePath);
         }

@@ -1,16 +1,6 @@
 <?php
 // 데이터베이스 연결
-$host = "127.0.0.1";
-$user = "root";
-$pw = "SgTest123!";
-$dbName = "sample01_db";
-$port = 3307;
-
-$conn = mysqli_connect($host, $user, $pw, $dbName, $port);
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+require_once 'db_config.php';
 
 // POST 데이터 받기
 $boardNum = isset($_POST['boardNum']) ? (int)$_POST['boardNum'] : 0;
@@ -30,24 +20,18 @@ if ($title == '' || $writer == '' || $content == '') {
     exit;
 }
 
-// 이미지 파일 업로드 처리
+// 파일 업로드 처리
 $fileName = $oldFileName; // 기본값은 기존 파일명
 
 if (isset($_FILES['upload']) && $_FILES['upload']['error'] == 0) {
-    $uploadDir = "../img/";
-
-    // 디렉토리가 없으면 생성
-    if (!file_exists($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
-
+    $uploadDir = "img/";
     $originalName = $_FILES['upload']['name'];
 
     // 파일 확장자 추출
     $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
 
-    // 이미지 파일만 허용
-    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+    // 허용할 확장자
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf', 'hwp', 'doc', 'docx'];
 
     if (in_array($extension, $allowedExtensions)) {
         // 파일명 중복 방지를 위해 타임스탬프 추가
@@ -61,11 +45,11 @@ if (isset($_FILES['upload']) && $_FILES['upload']['error'] == 0) {
             }
             $fileName = $newFileName;
         } else {
-            echo "<script>alert('이미지 업로드 중 오류가 발생했습니다.'); history.back();</script>";
+            echo "<script>alert('파일 업로드 중 오류가 발생했습니다.'); history.back();</script>";
             exit;
         }
     } else {
-        echo "<script>alert('이미지 파일만 업로드 가능합니다. (jpg, jpeg, png, gif)'); history.back();</script>";
+        echo "<script>alert('허용되지 않는 파일 형식입니다.'); history.back();</script>";
         exit;
     }
 }

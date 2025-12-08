@@ -1,16 +1,6 @@
 <?php
 // 데이터베이스 연결
-$host = "127.0.0.1";
-$user = "root";
-$pw = "SgTest123!";
-$dbName = "sample01_db";
-$port = 3307;
-
-$conn = mysqli_connect($host, $user, $pw, $dbName, $port);
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+require_once 'db_config.php';
 
 // 게시글 번호 받기
 $boardNum = isset($_GET['boardNum']) ? (int)$_GET['boardNum'] : 0;
@@ -44,12 +34,25 @@ $fileName = $row['fileName'];
         table {
             border-collapse: collapse;
         }
-        table td {
+        table, th, td {
             border: 1px solid black;
         }
-        td.ttl {
+        th {
+            background-color: #ddd;
             text-align: right;
-            background-color: #ccc;
+            padding: 10px;
+            width: 100px;
+        }
+        td {
+            padding: 10px;
+        }
+        .btn {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .current-file {
+            color: #666;
+            font-size: 14px;
         }
     </style>
     <script>
@@ -84,62 +87,49 @@ $fileName = $row['fileName'];
 
             return true;
         }
-
-        // 이미지 미리보기 함수
-        function previewImage(input) {
-            var preview = document.getElementById('imagePreview');
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
     </script>
 </head>
 <body>
     <h2>게시판 - 수정</h2>
 
-    <table>
     <form name="editForm" method="post" action="board_edit_process.php" enctype="multipart/form-data" onsubmit="return validateForm()">
         <input type="hidden" name="boardNum" value="<?php echo $boardNum; ?>">
         <input type="hidden" name="oldFileName" value="<?php echo $fileName; ?>">
-        <tr>
-            <td class="ttl">제목:</td>
-            <td><input type="text" name="title" value="<?php echo $title; ?>"></td>
-        </tr>
-        <tr>
-            <td class="ttl">작성자:</td>
-            <td><input type="text" name="writer" value="<?php echo $writer; ?>"></td>
-        </tr>
-        <tr>
-            <td class="ttl">내용:</td>
-            <td><textarea name="content" rows="15" cols="60"><?php echo $content; ?></textarea></td>
-        </tr>
-        <tr>
-            <td class="ttl">첨부이미지:</td>
-            <td>
-                <?php if ($fileName != null && $fileName != ''): ?>
-                    <img id="imagePreview" src="../img/<?php echo $fileName; ?>" style="max-width:400px; border:1px solid #ccc;"><br>
-                    현재 파일: <strong><?php echo $fileName; ?></strong><br>
-                <?php else: ?>
-                    <img id="imagePreview" src="" style="display:none; max-width:400px; border:1px solid #ccc;"><br>
-                <?php endif; ?>
-                <input type="file" name="upload" accept="image/*" onchange="previewImage(this)">
-                <br>새 이미지 선택 시 미리보기가 변경됩니다.
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2" align="center">
-                <input type="submit" value="수정완료">
-                <input type="reset" value="다시작성">
-                <input type="button" value="취소" onclick="history.back()">
-            </td>
-        </tr>
+
+        <table width="600">
+            <tr>
+                <th>제목</th>
+                <td><input type="text" name="title" value="<?php echo $title; ?>" style="width:90%;"></td>
+            </tr>
+            <tr>
+                <th>작성자</th>
+                <td><input type="text" name="writer" value="<?php echo $writer; ?>"></td>
+            </tr>
+            <tr>
+                <th>내용</th>
+                <td><textarea name="content" rows="15" cols="60"><?php echo $content; ?></textarea></td>
+            </tr>
+            <tr>
+                <th>첨부파일</th>
+                <td>
+                    <?php if ($fileName != null && $fileName != ''): ?>
+                        <div class="current-file">
+                            현재 파일: <strong><?php echo $fileName; ?></strong>
+                            <br><br>
+                        </div>
+                    <?php endif; ?>
+                    <input type="file" name="upload">
+                    <br><small style="color: #666;">새 파일을 선택하면 기존 파일이 교체됩니다.</small>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="submit" value="수정완료" class="btn">
+                    <input type="button" value="취소" onclick="history.back()" class="btn">
+                </td>
+            </tr>
+        </table>
     </form>
-    </table>
 </body>
 </html>
 <?php

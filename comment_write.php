@@ -1,16 +1,6 @@
 <?php
 // 데이터베이스 연결
-$host = "127.0.0.1";
-$user = "root";
-$pw = "SgTest123!";
-$dbName = "sample01_db";
-$port = 3307;
-
-$conn = mysqli_connect($host, $user, $pw, $dbName, $port);
-
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+require_once 'db_config.php';
 
 // POST 데이터 받기
 $boardNum = isset($_POST['boardNum']) ? (int)$_POST['boardNum'] : 0;
