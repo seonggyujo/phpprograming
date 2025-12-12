@@ -1,10 +1,19 @@
 <?php
+session_start();
+
+// 로그인 체크
+if (!isset($_SESSION['userId'])) {
+    header("Location: login.php?require_login=1");
+    exit;
+}
+
 // 데이터베이스 연결
 require_once 'db_config.php';
 
 // POST 데이터 받기
 $title = isset($_POST['title']) ? trim($_POST['title']) : '';
-$writer = isset($_POST['writer']) ? trim($_POST['writer']) : '';
+$writer = $_SESSION['userName']; // 세션에서 작성자 가져오기
+$memberNum = $_SESSION['memberNum']; // 회원번호
 $content = isset($_POST['content']) ? trim($_POST['content']) : '';
 $ipAddr = $_SERVER['REMOTE_ADDR'];
 
@@ -43,9 +52,9 @@ if (isset($_FILES['upload']) && $_FILES['upload']['error'] == 0) {
     }
 }
 
-// 데이터베이스에 저장
-$stmt = mysqli_prepare($conn, "INSERT INTO board (title, writer, content, fileName, ipAddr) VALUES (?, ?, ?, ?, ?)");
-mysqli_stmt_bind_param($stmt, "sssss", $title, $writer, $content, $fileName, $ipAddr);
+// 데이터베이스에 저장 (memberNum 추가)
+$stmt = mysqli_prepare($conn, "INSERT INTO board (title, writer, content, fileName, ipAddr, memberNum) VALUES (?, ?, ?, ?, ?, ?)");
+mysqli_stmt_bind_param($stmt, "sssssi", $title, $writer, $content, $fileName, $ipAddr, $memberNum);
 
 if (mysqli_stmt_execute($stmt)) {
     echo "<script>alert('게시글이 등록되었습니다.'); location.href='board_list.php';</script>";

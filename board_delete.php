@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// 로그인 체크
+if (!isset($_SESSION['userId'])) {
+    header("Location: login.php?require_login=1");
+    exit;
+}
+
 // 데이터베이스 연결
 require_once 'db_config.php';
 
@@ -10,8 +18,8 @@ if ($boardNum == 0) {
     exit;
 }
 
-// 삭제 전 파일명 조회
-$sql = "SELECT fileName FROM board WHERE boardNum = $boardNum";
+// 삭제 전 게시글 정보 조회
+$sql = "SELECT fileName, memberNum FROM board WHERE boardNum = $boardNum";
 $result = mysqli_query($conn, $sql);
 
 if (mysqli_num_rows($result) == 0) {
@@ -21,6 +29,13 @@ if (mysqli_num_rows($result) == 0) {
 
 $row = mysqli_fetch_assoc($result);
 $fileName = $row['fileName'];
+
+// 본인 글인지 확인
+$postMemberNum = isset($row['memberNum']) ? $row['memberNum'] : null;
+if ($_SESSION['memberNum'] != $postMemberNum) {
+    echo "<script>alert('본인의 글만 삭제할 수 있습니다.'); history.back();</script>";
+    exit;
+}
 
 // 게시글 삭제
 $deleteSql = "DELETE FROM board WHERE boardNum = $boardNum";

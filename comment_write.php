@@ -1,10 +1,19 @@
 <?php
+session_start();
+
+// 로그인 체크
+if (!isset($_SESSION['userId'])) {
+    header("Location: login.php?require_login=1");
+    exit;
+}
+
 // 데이터베이스 연결
 require_once 'db_config.php';
 
 // POST 데이터 받기
 $boardNum = isset($_POST['boardNum']) ? (int)$_POST['boardNum'] : 0;
-$writer = isset($_POST['writer']) ? trim($_POST['writer']) : '';
+$writer = $_SESSION['userName']; // 세션에서 작성자 가져오기
+$memberNum = $_SESSION['memberNum'];
 $content = isset($_POST['content']) ? trim($_POST['content']) : '';
 $ipAddr = $_SERVER['REMOTE_ADDR'];
 

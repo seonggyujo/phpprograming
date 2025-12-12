@@ -1,4 +1,5 @@
 <?php
+session_start();
 // 데이터베이스 연결
 require_once 'db_config.php';
 
@@ -30,6 +31,10 @@ $content = $row['content'];
 $fileName = $row['fileName'];
 $regDate = $row['regDate'];
 $viewCnt = $row['viewCnt'];
+$postMemberNum = isset($row['memberNum']) ? $row['memberNum'] : null;
+
+// 본인 글인지 확인
+$isOwner = (isset($_SESSION['memberNum']) && $_SESSION['memberNum'] == $postMemberNum);
 
 // 내용의 줄바꿈을 <br>로 변환
 $content = nl2br($content);
@@ -146,8 +151,10 @@ $commentResult = mysqli_query($conn, $commentSql);
     </table>
 
     <div class="button-group">
-        <input type="button" value="수정" onclick="location.href='board_edit.php?boardNum=<?php echo $boardNum; ?>'" class="btn">
-        <input type="button" value="삭제" onclick="confirmDelete()" class="btn">
+        <?php if ($isOwner): ?>
+            <input type="button" value="수정" onclick="location.href='board_edit.php?boardNum=<?php echo $boardNum; ?>'" class="btn">
+            <input type="button" value="삭제" onclick="confirmDelete()" class="btn">
+        <?php endif; ?>
         <input type="button" value="목록" onclick="location.href='board_list.php'" class="btn">
     </div>
 
@@ -178,12 +185,15 @@ $commentResult = mysqli_query($conn, $commentSql);
 
     <!-- 댓글 작성 폼 -->
     <div class="comment-form">
+        <?php if (isset($_SESSION['userId'])): ?>
         <form name="commentForm" method="post" action="comment_write.php" onsubmit="return validateComment()">
             <input type="hidden" name="boardNum" value="<?php echo $boardNum; ?>">
             <table width="600">
                 <tr>
                     <th width="100">작성자</th>
-                    <td><input type="text" name="writer"></td>
+                    <td>
+                        <input type="text" name="writer" value="<?php echo htmlspecialchars($_SESSION['userName']); ?>" readonly style="background:#f0f0f0;">
+                    </td>
                 </tr>
                 <tr>
                     <th>내용</th>
@@ -196,6 +206,9 @@ $commentResult = mysqli_query($conn, $commentSql);
                 </tr>
             </table>
         </form>
+        <?php else: ?>
+        <p style="color:#888;">댓글을 작성하려면 <a href="login.php">로그인</a>이 필요합니다.</p>
+        <?php endif; ?>
     </div>
 </body>
 </html>

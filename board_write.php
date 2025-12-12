@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// 로그인 체크
+if (!isset($_SESSION['userId'])) {
+    header("Location: login.php?require_login=1");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,7 +94,10 @@
             </tr>
             <tr>
                 <th>작성자</th>
-                <td><input type="text" name="writer"></td>
+                <td>
+                    <input type="text" name="writer" value="<?php echo htmlspecialchars($_SESSION['userName']); ?>" readonly style="background:#f0f0f0;">
+                    <input type="hidden" name="memberNum" value="<?php echo $_SESSION['memberNum']; ?>">
+                </td>
             </tr>
             <tr>
                 <th>내용</th>

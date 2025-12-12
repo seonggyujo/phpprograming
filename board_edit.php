@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// 로그인 체크
+if (!isset($_SESSION['userId'])) {
+    header("Location: login.php?require_login=1");
+    exit;
+}
+
 // 데이터베이스 연결
 require_once 'db_config.php';
 
@@ -20,6 +28,14 @@ if (mysqli_num_rows($result) == 0) {
 }
 
 $row = mysqli_fetch_assoc($result);
+
+// 본인 글인지 확인
+$postMemberNum = isset($row['memberNum']) ? $row['memberNum'] : null;
+if ($_SESSION['memberNum'] != $postMemberNum) {
+    echo "<script>alert('본인의 글만 수정할 수 있습니다.'); history.back();</script>";
+    exit;
+}
+
 $title = $row['title'];
 $writer = $row['writer'];
 $content = $row['content'];
@@ -103,7 +119,7 @@ $fileName = $row['fileName'];
             </tr>
             <tr>
                 <th>작성자</th>
-                <td><input type="text" name="writer" value="<?php echo $writer; ?>"></td>
+                <td><input type="text" name="writer" value="<?php echo htmlspecialchars($writer); ?>" readonly style="background:#f0f0f0;"></td>
             </tr>
             <tr>
                 <th>내용</th>

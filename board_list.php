@@ -1,4 +1,5 @@
 <?php
+session_start();
 // 데이터베이스 연결
 require_once 'db_config.php';
 
@@ -61,8 +62,24 @@ $totalPages = ceil($totalRecords / $listPerPage);
 <body>
     <h2>게시판</h2>
 
+    <!-- 로그인 상태 표시 -->
+    <div style="margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 4px;">
+        <?php if (isset($_SESSION['userId'])): ?>
+            <span><strong><?php echo htmlspecialchars($_SESSION['userName']); ?></strong>님 환영합니다!</span>
+            <a href="mypage.php" style="margin-left: 10px;">[마이페이지]</a>
+            <a href="logout.php" style="margin-left: 10px;">[로그아웃]</a>
+        <?php else: ?>
+            <a href="login.php">[로그인]</a>
+            <a href="register.php" style="margin-left: 10px;">[회원가입]</a>
+        <?php endif; ?>
+    </div>
+
     <div>
-        <input type="button" value="글쓰기" onclick="location.href='board_write.php'" class="btn">
+        <?php if (isset($_SESSION['userId'])): ?>
+            <input type="button" value="글쓰기" onclick="location.href='board_write.php'" class="btn">
+        <?php else: ?>
+            <input type="button" value="글쓰기" onclick="alert('로그인이 필요합니다.'); location.href='login.php';" class="btn">
+        <?php endif; ?>
         <span>전체 게시글: <?php echo $totalRecords; ?>개</span>
     </div>
 
