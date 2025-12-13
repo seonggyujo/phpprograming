@@ -66,6 +66,9 @@ $totalPages = ceil($totalRecords / $listPerPage);
     <div style="margin-bottom: 10px; padding: 10px; background: #f5f5f5; border-radius: 4px;">
         <?php if (isset($_SESSION['userId'])): ?>
             <span><strong><?php echo htmlspecialchars($_SESSION['userName']); ?></strong>님 환영합니다!</span>
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                <a href="admin/index.php" style="margin-left: 10px; color: #1976d2; font-weight: bold;">[관리자]</a>
+            <?php endif; ?>
             <a href="mypage.php" style="margin-left: 10px;">[마이페이지]</a>
             <a href="logout.php" style="margin-left: 10px;">[로그아웃]</a>
         <?php else: ?>

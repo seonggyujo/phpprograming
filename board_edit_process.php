@@ -1,6 +1,13 @@
 <?php
+session_start();
 // 데이터베이스 연결
 require_once 'db_config.php';
+
+// 로그인 체크
+if (!isset($_SESSION['userId'])) {
+    header("Location: login.php?require_login=1");
+    exit;
+}
 
 // POST 데이터 받기
 $boardNum = isset($_POST['boardNum']) ? (int)$_POST['boardNum'] : 0;
@@ -12,6 +19,23 @@ $oldFileName = isset($_POST['oldFileName']) ? $_POST['oldFileName'] : '';
 // 유효성 검사
 if ($boardNum == 0) {
     echo "<script>alert('잘못된 접근입니다.'); location.href='board_list.php';</script>";
+    exit;
+}
+
+// 권한 체크 - 본인 글인지 확인 (관리자는 모든 글 수정 가능)
+$checkSql = "SELECT memberNum FROM board WHERE boardNum = ?";
+$checkStmt = mysqli_prepare($conn, $checkSql);
+mysqli_stmt_bind_param($checkStmt, "i", $boardNum);
+mysqli_stmt_execute($checkStmt);
+$checkResult = mysqli_stmt_get_result($checkStmt);
+$checkRow = mysqli_fetch_assoc($checkResult);
+mysqli_stmt_close($checkStmt);
+
+$postMemberNum = isset($checkRow['memberNum']) ? $checkRow['memberNum'] : null;
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+
+if (!$isAdmin && $_SESSION['memberNum'] != $postMemberNum) {
+    echo "<script>alert('본인의 글만 수정할 수 있습니다.'); history.back();</script>";
     exit;
 }
 

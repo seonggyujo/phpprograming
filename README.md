@@ -19,6 +19,11 @@ PHP, MySQL, HTML, CSS, JavaScript
   - 페이지네이션
 - **댓글**
   - 댓글 작성/삭제 (로그인 사용자만)
+- **관리자**
+  - 대시보드 (회원/게시글/댓글 통계)
+  - 회원 관리 (목록, 검색, 수정, 삭제)
+  - 회원 역할 변경 (일반/관리자)
+  - 모든 게시글/댓글 수정/삭제 권한
 
 ## 설치 방법
 
@@ -63,6 +68,11 @@ http://localhost/board_project/board_list.php
 ## 파일 구조
 ```
 board_project/
+├── admin/                    # 관리자 페이지
+│   ├── index.php             # 관리자 대시보드
+│   ├── member_list.php       # 회원 목록
+│   ├── member_edit.php       # 회원 수정
+│   └── member_delete.php     # 회원 삭제
 ├── img/                      # 업로드된 이미지 저장 폴더
 ├── screenshots/              # 스크린샷
 │
@@ -93,6 +103,7 @@ board_project/
 ├── createBoardTable.php      # 게시판 테이블 생성
 ├── createCommentTable.php    # 댓글 테이블 생성
 ├── createMemberTable.php     # 회원 테이블 생성
+├── addRoleColumn.php         # 관리자 기능 초기화 스크립트
 └── createTable.sql           # SQL 테이블 생성 스크립트
 ```
 
@@ -107,3 +118,8 @@ board_project/
 | 로그인 | 회원가입 | 마이페이지 |
 |--------|----------|------------|
 | ![로그인](screenshots/login.png) | ![회원가입](screenshots/register.png) | ![마이페이지](screenshots/mypage.png) |
+
+### 관리자
+| 대시보드 | 회원 목록 | 회원 수정 |
+|----------|----------|----------|
+| ![대시보드](screenshots/AdminIndex.png) | ![회원목록](screenshots/memberList.png) | ![회원수정](screenshots/memberEdit.png) |

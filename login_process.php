@@ -19,7 +19,7 @@ if (empty($userId) || empty($userPw)) {
 }
 
 // 사용자 조회
-$sql = "SELECT memberNum, userId, userPw, userName FROM member WHERE userId = ?";
+$sql = "SELECT memberNum, userId, userPw, userName, role FROM member WHERE userId = ?";
 $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_bind_param($stmt, "s", $userId);
 mysqli_stmt_execute($stmt);
@@ -32,6 +32,7 @@ if ($row = mysqli_fetch_assoc($result)) {
         $_SESSION['memberNum'] = $row['memberNum'];
         $_SESSION['userId'] = $row['userId'];
         $_SESSION['userName'] = $row['userName'];
+        $_SESSION['role'] = $row['role'] ?? 'user';  // 관리자 역할 정보 추가
 
         // 마지막 로그인 시간 업데이트
         $updateSql = "UPDATE member SET lastLogin = NOW() WHERE memberNum = ?";

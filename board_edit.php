@@ -29,9 +29,11 @@ if (mysqli_num_rows($result) == 0) {
 
 $row = mysqli_fetch_assoc($result);
 
-// 본인 글인지 확인
+// 본인 글인지 확인 (관리자는 모든 글 수정 가능)
 $postMemberNum = isset($row['memberNum']) ? $row['memberNum'] : null;
-if ($_SESSION['memberNum'] != $postMemberNum) {
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+
+if (!$isAdmin && $_SESSION['memberNum'] != $postMemberNum) {
     echo "<script>alert('본인의 글만 수정할 수 있습니다.'); history.back();</script>";
     exit;
 }
